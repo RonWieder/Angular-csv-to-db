@@ -146,5 +146,8 @@
       }
     }
   },
-  "defaultProject": "clearX"
+  "defaultProject": "clearX",
+  "cli": {
+    "analytics": "894d08ac-bf83-42ed-8c81-8b2205d65822"
+  }
 }
