@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { ClearRow } from 'src/app/models/clear-row';
 import { CsvHandlerService } from 'src/app/services/csv-handler.service';
 
 @Component({
@@ -11,32 +12,29 @@ export class FileUploaderComponent {
   files: File[] = [];
   @Input() filesTypes: string[] = [];
   @Input() numfOfAllowedFiles: number | undefined;
-  $data;
+
+  $countries: Observable<string[]>;
+  $data: Observable<ClearRow[]>;
+
+  private loader: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  loader$ = this.loader.asObservable();
 
   constructor(private csvHandler: CsvHandlerService) { }
 
-  summarizeFiles() {
-    console.log('clicked');
-    this.csvHandler.uploadFile(this.files[0])
-      .subscribe(res => console.log(res));
+  /**
+   * sending file\s to server
+   */
+  sendFiles() {
+    this.$countries = this.csvHandler.uploadFiles(this.files);
+    this.files = [];
   }
 
+  /**
+   *
+   * @param country query data from server filterd on Country
+   */
   query(country?) {
     this.$data = this.csvHandler.getData();
-  }
-
-  /**
-   * on files drop handler
-   */
-  onFileDropped($event) {
-    this.prepareFilesList($event);
-  }
-
-  /**
-   * handle files from browsing
-   */
-  fileBrowseHandler(files) {
-    this.prepareFilesList(files);
   }
 
   /**
@@ -52,11 +50,7 @@ export class FileUploaderComponent {
    * and if it is, it converts Files list to normal array list
    * @param files (Files List)
    */
-  prepareFilesList(files: Array<any>) {
-    if (this.numfOfAllowedFiles === 1 && files.length > 1 || this.numfOfAllowedFiles > 1 && files.length > this.numfOfAllowedFiles)
-      return;
-    if (this.numfOfAllowedFiles === 1)
-      this.files = [];
+  updateFilesList(files: File[]) {
     for (const file of files) {
       this.files.push(file);
     }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { ClearRow } from '../models/clear-row';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +12,17 @@ export class CsvHandlerService {
 
   constructor(private http: HttpClient) { }
 
-  uploadFile(csvFile: File): Observable<string[]> {
+
+  uploadFiles(csvFiles: File[]): Observable<string[]> {
     const url = this.BASE_URL + `/api/file/upload`;
     const formData: FormData = new FormData();
-    formData.append('file', csvFile, csvFile.name);
+    csvFiles.forEach(csvFile => formData.append('file', csvFile));
     return this.http.post<string[]>(url, formData);
   }
 
-  getData(country?: string) {
-    const url = this.BASE_URL + `/api/query?country`;
-    return this.http.get(url);
+  getData(country?: string): Observable<ClearRow[]> {
+    const countryAppend = country ? `query?country=${country}` : '';
+    const url = this.BASE_URL + `/api/query` + countryAppend;
+    return this.http.get<ClearRow[]>(url);
   }
 }

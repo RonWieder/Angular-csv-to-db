@@ -1,12 +1,12 @@
 <div class="container landing-container"
      DragNDrop
-     (fileDropped)="onFileDropped($event)">
+     (fileDropped)="updateFilesList($event)">
   <input type="file"
          #fileDropRef
          id="fileDropRef"
          [accept]="filesTypes"
          [attr.multiple]="!numfOfAllowedFiles || numfOfAllowedFiles > 1 ? '':null"
-         (change)="fileBrowseHandler($event.target.files)" />
+         (change)="updateFilesList($event.target.files)" />
   <img src="../../../assets/cloud-2044823_960_720.png">
 
   <h3>Drag and drop file here</h3>
@@ -36,7 +36,7 @@
   </div>
   <div class="button-wrapper">
     <button *ngIf="files.length>0"
-            (click)="summarizeFiles()">Summarize {{files.length > 1 ? 'files':'file'}}</button>
+            (click)="sendFiles()">Upload {{files.length > 1 ? 'files':'file'}}</button>
   </div>
 </div>
 <!-- <ng-container *ngIf="($data | async) as data">

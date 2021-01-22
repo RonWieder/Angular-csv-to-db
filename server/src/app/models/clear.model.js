@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db.config.js");
 
+// Definea Sequelize model to handle most of read from n write to db
 const Clear = sequelize.define(
   "Clear",
   {
@@ -37,6 +38,7 @@ createTable();
 
 exports.Clear = Clear;
 
+// array of headers of model to create save-able object
 exports.clearHeaders = [
   "homeOperatorCode",
   "visitedOperatorCode",

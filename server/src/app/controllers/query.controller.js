@@ -2,7 +2,7 @@ const fs = require("fs");
 const { QueryTypes } = require("sequelize");
 const sequelize = require("../config/db.config.js");
 
-// query ...
+// query data rows aggregated by country, year and month, with data summed up
 exports.query = async (country) => {
   const data = sequelize.query(
     `select destinationCountry as Country, cast(year as text) || '-' || cast((month+1) as text) as date,
