@@ -10,6 +10,9 @@
 # dependencies
 node_modules
 
+# csv files
+/server/src/uploads
+
 #db
 *.sqlite
 

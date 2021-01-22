@@ -11,7 +11,7 @@ export class FileUploaderComponent {
   files: File[] = [];
   @Input() filesTypes: string[] = [];
   @Input() numfOfAllowedFiles: number | undefined;
-  $data: Observable<string>;
+  $data;
 
   constructor(private csvHandler: CsvHandlerService) { }
 
@@ -19,6 +19,10 @@ export class FileUploaderComponent {
     console.log('clicked');
     this.csvHandler.uploadFile(this.files[0])
       .subscribe(res => console.log(res));
+  }
+
+  query(country?) {
+    this.$data = this.csvHandler.getData();
   }
 
   /**

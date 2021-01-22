@@ -42,3 +42,8 @@
 <!-- <ng-container *ngIf="($data | async) as data">
   <app-table></app-table>
 </ng-container> -->
+<button (click)="query()">Click to query</button>
+
+<ng-container *ngIf="$data | async as data">
+  <div>{{ data.rows.length }}</div>
+</ng-container>

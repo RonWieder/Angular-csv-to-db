@@ -36,6 +36,7 @@ async function createTable() {
 createTable();
 
 exports.Clear = Clear;
+
 exports.clearHeaders = [
   "homeOperatorCode",
   "visitedOperatorCode",

@@ -7,7 +7,7 @@ import { Observable, of } from 'rxjs';
 })
 export class CsvHandlerService {
 
-  private readonly BASE_URL: string = 'http://localhost:3000/';
+  private readonly BASE_URL: string = 'http://localhost:3000';
 
   constructor(private http: HttpClient) { }
 
@@ -16,5 +16,10 @@ export class CsvHandlerService {
     const formData: FormData = new FormData();
     formData.append('file', csvFile, csvFile.name);
     return this.http.post<string[]>(url, formData);
+  }
+
+  getData(country?: string) {
+    const url = this.BASE_URL + `/api/query?country`;
+    return this.http.get(url);
   }
 }

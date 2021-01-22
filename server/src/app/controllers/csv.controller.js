@@ -5,68 +5,68 @@ const { Clear, clearHeaders } = require("../models/clear.model.js");
 
 function rowToObject(row) {
   return row.reduce(function (acc, cur, i) {
-    ({ ...acc, [clearHeaders[i]]: cur });
+    acc[clearHeaders[i]] = cur;
+    return acc;
   }, {});
 }
 
 // Handle upload of single file
-// exports.uploadFile = (req, res) => {
-//   const clearings = [];
-//   const result = {};
-//   const beginUploadTime = new Date().getTime();
-//   try {
-//     fs.createReadStream(__basedir + "/uploads/" + req.file.filename)
-//       .pipe(csv.parse())
-//       .on("data", (row) => clearings.push(rowToObject(row)))
-//       .on("end", () => {
-//         // Save clearings to db as a bulk
-//         Clear.bulkCreate(clearings).then(() => {
-//           console.log(
-//             "time passed till ending:",
-//             new Date().getTime() - beginUploadTime,
-//             "ms"
-//           );
+exports.uploadFile = (req, res) => {
+  const clearings = [];
+  const beginUploadTime = new Date().getTime();
+  try {
+    fs.createReadStream(__basedir + "/uploads/" + req.file.filename)
+      .pipe(csv.parse())
+      .on("data", (row) => clearings.push(rowToObject(row)))
+      .on("end", () => {
+        // Save clearings to db as a bulk
+        Clear.bulkCreate(clearings).then(() => {
+          console.log(
+            "time passed till ending:",
+            new Date().getTime() - beginUploadTime,
+            "ms"
+          );
 
-//           // Build the return object which is the list of distinct countries (destinationCountry) in db
-//           Clear.findAll({
-//             attributes: [
-//               [
-//                 sequelize.fn("DISTINCT", sequelize.col("destinationCountry")),
-//                 "Country",
-//               ],
-//             ],
-//             where: {
-//               [sequelize.Op.not]: [{ destinationCountry: "(blank)" }],
-//             },
-//           })
-//             .then((data) =>
-//               // Cast array of objects to array of strings
-//               data.map((countryObj) => countryObj.dataValues.Country)
-//             )
-//             .then((data) => {
-//               const result = {
-//                 status: "ok",
-//                 clears: data,
-//                 message: "Upload Successfully!",
-//               };
+          // Build the return object which is the list of distinct countries (destinationCountry) in db
+          Clear.findAll({
+            attributes: [
+              [
+                sequelize.fn("DISTINCT", sequelize.col("destinationCountry")),
+                "Country",
+              ],
+            ],
+            where: {
+              [sequelize.Op.not]: [{ destinationCountry: "(blank)" }],
+            },
+          })
+            .then((data) =>
+              // Cast array of objects to array of strings
+              data.map((countryObj) => countryObj.dataValues.Country)
+            )
+            .then((data) => {
+              const result = {
+                status: "ok",
+                clears: data,
+                message: "Upload Successfully!",
+              };
 
-//               res.json(result);
-//             });
-//         });
-//       })
-//       .on("error", (error) => {
-//         console.error(error);
-//         throw error.message;
-//       });
-//   } catch (error) {
-//     const result = {
-//       status: "fail",
-//       filename: req.file.originalname,
-//       message: "Upload Error! message = " + error.message,
-//     };
-//     res.json(result);
-//   }
-// };
+              res.json(result);
+            });
+        });
+      })
+      .on("error", (error) => {
+        console.error(error);
+        throw error.message;
+      });
+  } catch (error) {
+    const result = {
+      status: "fail",
+      filename: req.file.originalname,
+      message: "Upload Error! message = " + error.message,
+    };
+    res.json(result);
+  }
+};
 
 exports.uploadFiles = async (req, res) => {
   const messages = [];
