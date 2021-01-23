@@ -1,6 +1,6 @@
 export interface ClearRow {
   country: string,
-  period: string,
+  time: string,
   dataUsage: number,
   dataCharges: number,
   smsUsage: number,

@@ -14,7 +14,9 @@ async function getCountriesArray() {
     },
   });
 
-  return query.map((countryObj) => countryObj.dataValues.Country);
+  return query.map((countryObj, i) => {
+    return { id: i + 1, country: countryObj.dataValues.Country };
+  });
 }
 
 module.exports = getCountriesArray;

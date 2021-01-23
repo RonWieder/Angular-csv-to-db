@@ -9,7 +9,7 @@ exports.uploadFiles = async (req, res) => {
   for (let file of req.files) {
     try {
       // Parsing CSV File to data array objects
-      const filePath = __basedir + "/uploads/" + file.filename;
+      const filePath = `${__basedir}\\uploads\\${file.filename}`;
       const readfs = fs.createReadStream(filePath).pipe(csv.parse());
 
       // Wrapping reading of the file in async function
@@ -41,7 +41,6 @@ exports.uploadFiles = async (req, res) => {
           const message = {
             status: "ok",
             filename: file.originalname,
-            message: "Upload Successfully!",
           };
           messages.push(message);
         });
@@ -56,13 +55,12 @@ exports.uploadFiles = async (req, res) => {
     }
   }
 
-  const countriesArray = getCountriesArray();
+  // Get list of all distinct countries in db
+  const countries = await getCountriesArray();
 
   const result = {
-    status: "ok",
     messages,
-    countriesArray,
-    message: "Upload Successfully!",
+    countries,
   };
   res.json(result);
 };

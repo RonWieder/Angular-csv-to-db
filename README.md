@@ -2,26 +2,20 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.5.
 
-## Development server
+# How to run the app
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+After cloning the project, cd to created directory (by default 'clearX') and run `npm i`. Then cd to `/server` directory and run `npm i` again.
+cd back one directory (should be in 'clearX' directory) and if all installation processes have finished, run `npm start`, and in different trminal, in same directory, run `npm run server`
 
-## Code scaffolding
+After both servers are up and running, go to `http://localhost:4200` to see the app in action.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+# Some guidlelines on how to use the app
 
-## Build
+App is making use of sqlite db so no prior local configuration is needed.
+After some data is kept in db, and db contains valid countries, a search bar will appear, allowing the user to query the db for any of the countries in it.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+csv files can be added in front with both dragNDrop and also via browsing in file system
 
-## Running unit tests
+After files are saved in db, the raw files are removed from server to make room.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+The table that present the data makes use of pagination for better UX

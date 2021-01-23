@@ -1,6 +1,9 @@
-import { Component, Input } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { ClearRow } from 'src/app/models/clear-row';
+import { Country } from 'src/app/models/country';
+import { Header } from 'src/app/models/header';
 import { CsvHandlerService } from 'src/app/services/csv-handler.service';
 
 @Component({
@@ -8,33 +11,61 @@ import { CsvHandlerService } from 'src/app/services/csv-handler.service';
   templateUrl: './file-uploader.component.html',
   styleUrls: ['./file-uploader.component.scss']
 })
-export class FileUploaderComponent {
+export class FileUploaderComponent implements OnInit {
   files: File[] = [];
   @Input() filesTypes: string[] = [];
   @Input() numfOfAllowedFiles: number | undefined;
 
-  $countries: Observable<string[]>;
-  $data: Observable<ClearRow[]>;
+  $countries: Observable<Country[]>;
+  $clearings: Observable<ClearRow[]>;
 
-  private loader: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  loader$ = this.loader.asObservable();
+  headers: Header[] = [
+    { field: 'Country' },
+    { field: 'Period' },
+    { field: 'Data Usage' },
+    { field: 'Data Charges' },
+    { field: 'SMS Usage' },
+    { field: 'SMS Charges' },
+    { field: 'MOC Usage' },
+    { field: 'MOC Charges' },
+    { field: 'MTC Usage' },
+    { field: 'MTC Charges' },
+  ]
+
+  private loading: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  loader$ = this.loading.asObservable();
 
   constructor(private csvHandler: CsvHandlerService) { }
+
+  ngOnInit(): void {
+    this.getCountries();
+  }
 
   /**
    * sending file\s to server
    */
   sendFiles() {
-    this.$countries = this.csvHandler.uploadFiles(this.files);
+    this.loading.next(true);
+    this.$countries = this.csvHandler.uploadFiles(this.files).pipe(
+      map(data => data['countries']),
+      tap(() => this.loading.next(false))
+    );
     this.files = [];
+  }
+
+  getCountries() {
+    this.loading.next(true);
+    this.$countries = this.csvHandler.getCountries().pipe(
+      tap(() => this.loading.next(false))
+    );
   }
 
   /**
    *
    * @param country query data from server filterd on Country
    */
-  query(country?) {
-    this.$data = this.csvHandler.getData();
+  queryByCountry(countryObject: Country) {
+    this.$clearings = this.csvHandler.getData(countryObject.country);
   }
 
   /**

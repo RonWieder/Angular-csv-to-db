@@ -9,16 +9,14 @@
          (change)="updateFilesList($event.target.files)" />
   <img src="../../../assets/cloud-2044823_960_720.png">
 
-  <h3>Drag and drop file here</h3>
+  <h3>Drag and drop files here</h3>
   <h3>or</h3>
-  <label for="fileDropRef">Browse for file</label>
+  <label for="fileDropRef">Browse for files</label>
 </div>
 <div class="files-list">
   <div class="single-file container"
        *ngFor="let file of files; let i = index">
-    <!-- <div class="file-icon"> -->
     <img src="../../../assets/Filetype-Docs-icon.png">
-    <!-- </div> -->
     <div class="info">
       <h4 class="name">
         {{ file?.name }}
@@ -26,7 +24,6 @@
       <p class="size">
         {{ formatBytes(file?.size) }}
       </p>
-      <!-- <button (click)="printThis(file)">View file data</button> -->
     </div>
 
     <div class="delete"
@@ -39,11 +36,16 @@
             (click)="sendFiles()">Upload {{files.length > 1 ? 'files':'file'}}</button>
   </div>
 </div>
-<!-- <ng-container *ngIf="($data | async) as data">
-  <app-table></app-table>
-</ng-container> -->
-<button (click)="query()">Click to query</button>
 
-<ng-container *ngIf="$data | async as data">
-  <div>{{ data.rows.length }}</div>
+<div class="loader"
+     *ngIf="loader$ | async">Data is loading...</div>
+<ng-container *ngIf="$countries | async as countries">
+  <ng-container *ngIf="countries.length > 0">
+    <app-country-filter [countries]="countries"
+                        (setCountry)="queryByCountry($event)"></app-country-filter>
+    <app-data-table *ngIf="$clearings | async as clearings"
+                    [clearings]="clearings"
+                    [headers]="headers">
+    </app-data-table>
+  </ng-container>
 </ng-container>

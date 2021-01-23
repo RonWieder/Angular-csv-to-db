@@ -1,0 +1,19 @@
+<div class="search-container">
+  <ng-autocomplete [data]="countries"
+                   [searchKeyword]="'country'"
+                   placeholder="Enter the Country Name"
+                   (selected)='selectCountry($event)'
+                   [itemTemplate]="itemTemplate"
+                   [notFoundTemplate]="notFoundTemplate"
+                   [debounceTime]="200">
+  </ng-autocomplete>
+  <ng-template #itemTemplate
+               let-item>
+    <a [innerHTML]="item.country"></a>
+  </ng-template>
+
+  <ng-template #notFoundTemplate
+               let-notFound>
+    <div [innerHTML]="notFound"></div>
+  </ng-template>
+</div>

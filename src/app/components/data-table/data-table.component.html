@@ -1,0 +1,8 @@
+<ag-grid-angular style="width: 70%; height: 400px; margin: 10px auto;"
+                 class="ag-theme-alpine"
+                 [rowData]="clearings"
+                 [columnDefs]="headers"
+                 [paginationAutoPageSize]="true"
+                 [pagination]="true"
+                 (gridReady)="onGridReady($event)">
+</ag-grid-angular>
