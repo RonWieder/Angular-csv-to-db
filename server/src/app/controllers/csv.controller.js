@@ -9,7 +9,7 @@ exports.uploadFiles = async (req, res) => {
   for (let file of req.files) {
     try {
       // Parsing CSV File to data array objects
-      const filePath = `${__basedir}\\uploads\\${file.filename}`;
+      const filePath = `${__basedir}/uploads/${file.filename}`;
       const readfs = fs.createReadStream(filePath).pipe(csv.parse());
 
       // Wrapping reading of the file in async function
