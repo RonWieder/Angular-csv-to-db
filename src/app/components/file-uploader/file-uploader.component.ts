@@ -38,7 +38,7 @@ export class FileUploaderComponent implements OnInit {
   constructor(private csvHandler: CsvHandlerService) { }
 
   ngOnInit(): void {
-    this.getCountries();
+    this.queryCountries();
   }
 
   /**
@@ -53,7 +53,7 @@ export class FileUploaderComponent implements OnInit {
     this.files = [];
   }
 
-  getCountries() {
+  queryCountries() {
     this.loading.next(true);
     this.$countries = this.csvHandler.getCountries().pipe(
       tap(() => this.loading.next(false))

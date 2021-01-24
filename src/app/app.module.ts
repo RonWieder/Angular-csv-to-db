@@ -6,7 +6,6 @@ import { AgGridModule } from 'ag-grid-angular';
 import { AppComponent } from './app.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import { DragNDropDirective } from './directives/drag-n-drop.directive';
-import { TableComponent } from './table/table.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DataTableComponent } from './components/data-table/data-table.component';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
@@ -17,7 +16,6 @@ import { CountryFilterComponent } from './components/country-filter/country-filt
     AppComponent,
     FileUploaderComponent,
     DragNDropDirective,
-    TableComponent,
     DataTableComponent,
     CountryFilterComponent,
   ],
